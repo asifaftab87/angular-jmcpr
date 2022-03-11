@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit{
   constructor(
                 private authService: AuthService, 
                 private router: Router,
-                @Inject(TOASTR_TOKEN) private toastr: Toastr  
+                @Inject(TOASTR_TOKEN) private toastr: Toastr 
               ){}
 
   ngOnInit(): void {
@@ -44,11 +44,17 @@ export class ProfileComponent implements OnInit{
     console.log('formsubmit: '+profileValue);
     if(this.profileForm.valid){  
       this.authService.updateCurrentUser(profileValue.firstName, profileValue.lastName)
-      this.toastr.success('Profile saved');
-      //this.router.navigate(['events'])
+        .subscribe(()=> {
+          this.toastr.success('Profile saved');
+        })
     }
   }
   cancel(): void{
     this.router.navigate(['events'])
   } 
+  logout(){
+    this.authService.logout().subscribe(()=> {
+      this.router.navigate(['/user/login']);
+    });
+  }
 }
